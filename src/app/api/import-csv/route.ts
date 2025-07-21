@@ -28,16 +28,31 @@ interface PurchaseOrderEntryData {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Starting CSV import process...');
+    
     const { data }: { data: PurchaseOrderData[] } = await request.json();
     
     if (!data || !Array.isArray(data)) {
+      console.error('Invalid data format received');
       return NextResponse.json(
         { error: 'Invalid data format' },
         { status: 400 }
       );
     }
 
-    const dataSource = await getDataSource();
+    console.log(`Processing ${data.length} purchase orders...`);
+    
+    let dataSource;
+    try {
+      dataSource = await getDataSource();
+      console.log('Database connection established');
+    } catch (dbError) {
+      console.error('Database connection failed:', dbError);
+      return NextResponse.json(
+        { error: 'Database connection failed' },
+        { status: 500 }
+      );
+    }
     const purchaseOrderRepository = dataSource.getRepository(PurchaseOrder);
     const purchaseOrderEntryRepository = dataSource.getRepository(PurchaseOrderEntry);
 
@@ -112,8 +127,23 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Import error:', error);
+    
+    // Provide more specific error messages
+    let errorMessage = 'Internal server error during import';
+    if (error instanceof Error) {
+      if (error.message.includes('ECONNREFUSED')) {
+        errorMessage = 'Database connection refused. Please check database server.';
+      } else if (error.message.includes('ETIMEDOUT')) {
+        errorMessage = 'Database connection timed out. Please try again.';
+      } else if (error.message.includes('ER_ACCESS_DENIED')) {
+        errorMessage = 'Database access denied. Please check credentials.';
+      } else {
+        errorMessage = `Import failed: ${error.message}`;
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error during import' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

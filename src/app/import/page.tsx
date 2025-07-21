@@ -164,13 +164,20 @@ export default function ImportPage() {
     setError(null);
 
     try {
+      // Create an AbortController for timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
+
       const response = await fetch('/api/import-csv', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ data: parsedData }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         const result = await response.json();
@@ -185,7 +192,18 @@ export default function ImportPage() {
         setError(`Error saving to database: ${errorData.error}`);
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      console.error('Import error:', err);
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          setError('Request timed out. The file might be too large or the server is busy. Please try again.');
+        } else if (err.message.includes('Failed to fetch')) {
+          setError('Network connection failed. Please check your internet connection and try again.');
+        } else {
+          setError(`Network error: ${err.message}`);
+        }
+      } else {
+        setError('Network error. Please try again.');
+      }
     }
 
     setIsSaving(false);
