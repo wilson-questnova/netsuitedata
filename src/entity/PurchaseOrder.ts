@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { PurchaseOrderEntry } from './PurchaseOrderEntry';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class PurchaseOrder {
@@ -29,7 +28,4 @@ export class PurchaseOrder {
 
   @Column({ type: 'date', nullable: true })
   receiveBy!: Date;
-
-  @OneToMany('PurchaseOrderEntry', (entry: PurchaseOrderEntry) => entry.purchaseOrder, { cascade: true })
-  entries!: PurchaseOrderEntry[];
 }

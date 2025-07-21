@@ -17,7 +17,6 @@ const AppDataSource = (synchronize: boolean) => new DataSource({
   subscribers: [],
   // Additional options for remote connections
   connectTimeout: 60000,
-  acquireTimeout: 60000,
 });
 
 let dataSource: DataSource;

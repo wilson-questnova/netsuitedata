@@ -112,8 +112,7 @@ async function main() {
           for (const poData of purchaseOrderList) {
             // Check if purchase order already exists
             let purchaseOrder = await purchaseOrderRepository.findOne({
-              where: { documentNumber: poData.documentNumber },
-              relations: ['entries']
+              where: { documentNumber: poData.documentNumber }
             });
 
             if (purchaseOrder) {
@@ -126,9 +125,7 @@ async function main() {
               purchaseOrder.receiveBy = poData.receiveBy;
 
               // Remove existing entries
-              if (purchaseOrder.entries && purchaseOrder.entries.length > 0) {
-                await purchaseOrderEntryRepository.remove(purchaseOrder.entries);
-              }
+              await purchaseOrderEntryRepository.delete({ purchaseOrderId: purchaseOrder.id });
             } else {
               // Create new purchase order
               purchaseOrder = new PurchaseOrder();
@@ -142,17 +139,19 @@ async function main() {
               purchaseOrder.receiveBy = poData.receiveBy;
             }
 
+            // Save purchase order first
+            await purchaseOrderRepository.save(purchaseOrder);
+
             // Create new entries
-            purchaseOrder.entries = poData.entries.map(entryData => {
+            for (const entryData of poData.entries) {
               const entry = new PurchaseOrderEntry();
               entry.item = entryData.itemName;
               entry.rate = entryData.unitPrice;
               entry.amount = entryData.unitPrice * entryData.quantity;
               entry.quantity = entryData.quantity;
-              return entry;
-            });
-
-            await purchaseOrderRepository.save(purchaseOrder);
+              entry.purchaseOrderId = purchaseOrder.id;
+              await purchaseOrderEntryRepository.save(entry);
+            }
           }
 
           console.log('Data imported successfully');

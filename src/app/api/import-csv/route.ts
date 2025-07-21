@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { NextRequest, NextResponse } from 'next/server';
 import { PurchaseOrder } from '../../../entity/PurchaseOrder';
 import { PurchaseOrderEntry } from '../../../entity/PurchaseOrderEntry';
@@ -49,8 +48,7 @@ export async function POST(request: NextRequest) {
       try {
         // Check if purchase order already exists
         const existingPO = await purchaseOrderRepository.findOne({
-          where: { documentNumber: poData.documentNumber },
-          relations: ['entries']
+          where: { documentNumber: poData.documentNumber }
         });
 
         let purchaseOrder: PurchaseOrder;
@@ -66,9 +64,7 @@ export async function POST(request: NextRequest) {
           existingPO.receiveBy = poData.receiveBy ? new Date(poData.receiveBy) : new Date();
 
           // Remove existing entries
-          if (existingPO.entries && existingPO.entries.length > 0) {
-            await purchaseOrderEntryRepository.remove(existingPO.entries);
-          }
+          await purchaseOrderEntryRepository.delete({ purchaseOrderId: existingPO.id });
 
           purchaseOrder = await purchaseOrderRepository.save(existingPO);
         } else {
@@ -93,7 +89,7 @@ export async function POST(request: NextRequest) {
           entry.rate = entryData.unitPrice;
           entry.amount = entryData.unitPrice * entryData.quantity;
           entry.quantity = entryData.quantity;
-          entry.purchaseOrder = purchaseOrder;
+          entry.purchaseOrderId = purchaseOrder.id;
 
           await purchaseOrderEntryRepository.save(entry);
         }

@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { DataSource } from 'typeorm';
 import { PurchaseOrder } from '../../../entity/PurchaseOrder';
+import { PurchaseOrderEntry } from '../../../entity/PurchaseOrderEntry';
 import { getDataSource } from '../../../lib/db';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -9,21 +9,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
-async function getPurchaseOrder(id: number) {
+async function getPurchaseOrderWithEntries(id: number) {
   const dataSource = await getDataSource();
   const purchaseOrderRepository = dataSource.getRepository(PurchaseOrder);
+  const purchaseOrderEntryRepository = dataSource.getRepository(PurchaseOrderEntry);
 
   const purchaseOrder = await purchaseOrderRepository.findOne({
     where: { id },
-    relations: ['entries'],
   });
 
-  return purchaseOrder;
+  if (!purchaseOrder) {
+    return null;
+  }
+
+  const entries = await purchaseOrderEntryRepository.find({
+    where: { purchaseOrderId: id },
+  });
+
+  return { ...purchaseOrder, entries };
 }
 
 export default async function PurchaseOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const purchaseOrder = await getPurchaseOrder(Number(id));
+  const purchaseOrder = await getPurchaseOrderWithEntries(Number(id));
 
   if (!purchaseOrder) {
     return <div>Purchase order not found</div>;
