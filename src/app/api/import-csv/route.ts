@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     for (const poData of data) {
       try {
         // Check if purchase order already exists
-        let existingPO = await purchaseOrderRepository.findOne({
+        const existingPO = await purchaseOrderRepository.findOne({
           where: { documentNumber: poData.documentNumber },
           relations: ['entries']
         });
