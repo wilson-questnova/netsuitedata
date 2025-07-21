@@ -162,7 +162,7 @@ async function main() {
           reject(error);
         }
       },
-      error: (error: any) => {
+      error: (error: Error) => {
         console.error('Error parsing CSV:', error);
         reject(error);
       }

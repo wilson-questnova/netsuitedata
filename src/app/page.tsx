@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Upload } from 'lucide-react';
 import Link from 'next/link';
 
-export default function PurchaseOrderPage() {
+function PurchaseOrderContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('query') || '';
   const status = searchParams.get('status') || '';
@@ -51,5 +51,18 @@ export default function PurchaseOrderPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PurchaseOrderPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span className="ml-2 text-gray-600">Loading...</span>
+      </div>
+    }>
+      <PurchaseOrderContent />
+    </Suspense>
   );
 }

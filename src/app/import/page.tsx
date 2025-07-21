@@ -93,7 +93,8 @@ export default function ImportPage() {
             try {
               const purchaseOrders: { [key: string]: PurchaseOrderData } = {};
 
-              results.data.forEach((row: any) => {
+              results.data.forEach((rowData: unknown) => {
+                 const row = rowData as Record<string, string>;
                  const documentNumber = row['Document Number '];
                  if (!documentNumber) return;
 
@@ -131,12 +132,12 @@ export default function ImportPage() {
               const parsedArray = Object.values(purchaseOrders);
               setParsedData(parsedArray);
               setIsLoading(false);
-            } catch (err) {
+            } catch {
               setError('Error parsing CSV data. Please check the file format.');
               setIsLoading(false);
             }
           },
-          error: (error: any) => {
+          error: (error: Error) => {
              setError(`Error parsing CSV: ${error.message}`);
              setIsLoading(false);
            }

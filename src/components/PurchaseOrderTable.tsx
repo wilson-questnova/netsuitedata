@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { DataSource, Like } from 'typeorm';
+import { DataSource, Like, FindOptionsWhere } from 'typeorm';
 import { PurchaseOrder } from '../entity/PurchaseOrder';
 import { getDataSource } from '../lib/db';
 import Link from 'next/link';
@@ -9,7 +9,7 @@ async function getPurchaseOrders(query: string, status: string) {
   const dataSource = await getDataSource();
   const purchaseOrderRepository = dataSource.getRepository(PurchaseOrder);
 
-  const where: any = {};
+  const where: FindOptionsWhere<PurchaseOrder> = {};
   if (query) {
     where.documentNumber = Like(`%${query}%`);
   }

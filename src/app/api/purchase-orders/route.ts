@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { NextRequest, NextResponse } from 'next/server';
-import { Like, Between, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import { Like, Between, MoreThanOrEqual, LessThanOrEqual, FindOptionsWhere } from 'typeorm';
 import { PurchaseOrder } from '../../../entity/PurchaseOrder';
 import { getDataSource } from '../../../lib/db';
 
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const dataSource = await getDataSource();
     const purchaseOrderRepository = dataSource.getRepository(PurchaseOrder);
 
-    const where: any = {};
+    const where: FindOptionsWhere<PurchaseOrder> = {};
     if (query) {
       where.documentNumber = Like(`%${query}%`);
     }
