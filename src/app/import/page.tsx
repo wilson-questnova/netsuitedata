@@ -233,7 +233,7 @@ export default function ImportPage() {
         <Link href="/">
           <Button variant="outline" size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Purchase Orders
+            Dashboard
           </Button>
         </Link>
         <h1 className="text-3xl font-bold">Import CSV Data</h1>

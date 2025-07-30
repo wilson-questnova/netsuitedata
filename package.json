@@ -6,10 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "import-csv": "ts-node -r dotenv/config scripts/import-csv.ts",
+    "import-transactions": "ts-node -r dotenv/config scripts/import-transactions.ts",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.3.2",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.3",

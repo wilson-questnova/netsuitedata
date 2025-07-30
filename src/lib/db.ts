@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { PurchaseOrder } from '../entity/PurchaseOrder';
 import { PurchaseOrderEntry } from '../entity/PurchaseOrderEntry';
+import { Transaction } from '../entity/Transaction';
 import path from 'path';
 
 const AppDataSource = (synchronize: boolean) => {
@@ -14,7 +15,7 @@ const AppDataSource = (synchronize: boolean) => {
       database: path.join(process.cwd(), 'netsuite_data.sqlite'),
       synchronize: true, // Auto-create tables for SQLite
       logging: process.env.DB_LOGGING === 'true' || false,
-      entities: [PurchaseOrder, PurchaseOrderEntry],
+      entities: [PurchaseOrder, PurchaseOrderEntry, Transaction],
       migrations: [],
       subscribers: [],
     });
@@ -30,7 +31,7 @@ const AppDataSource = (synchronize: boolean) => {
     database: process.env.DB_DATABASE || 'netsuite_data',
     synchronize: process.env.DB_SYNCHRONIZE === 'true' || synchronize,
     logging: process.env.DB_LOGGING === 'true' || false,
-    entities: [PurchaseOrder, PurchaseOrderEntry],
+    entities: [PurchaseOrder, PurchaseOrderEntry, Transaction],
     migrations: [],
     subscribers: [],
     // Connection pooling configuration
