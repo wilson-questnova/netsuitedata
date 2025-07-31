@@ -34,12 +34,12 @@ export default function TransactionsPage() {
                   <span>View Purchase Orders</span>
                 </Button>
               </Link>
-              <Link href="/import">
+              {/* <Link href="/import">
                 <Button className="flex items-center space-x-2">
                   <Upload className="h-4 w-4" />
                   <span>Import CSV</span>
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </CardHeader>

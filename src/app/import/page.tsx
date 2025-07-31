@@ -319,36 +319,44 @@ export default function ImportPage() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Document Number</TableHead>
-                    <TableHead>Vendor</TableHead>
-                    <TableHead>Total</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Entries</TableHead>
+                  <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+                    <TableHead className="font-semibold text-slate-700 bg-slate-100">Document Number</TableHead>
+                    <TableHead className="font-semibold text-slate-700 bg-slate-100">Vendor</TableHead>
+                    <TableHead className="font-semibold text-slate-700 bg-slate-100">Total</TableHead>
+                    <TableHead className="font-semibold text-slate-700 bg-slate-100">Status</TableHead>
+                    <TableHead className="font-semibold text-slate-700 bg-slate-100">Date</TableHead>
+                    <TableHead className="font-semibold text-slate-700 bg-slate-100">Entries</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {parsedData.slice(0, 10).map((po, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="font-medium">{po.documentNumber}</TableCell>
-                      <TableCell>{po.vendor}</TableCell>
-                      <TableCell>{formatCurrency(po.total)}</TableCell>
+                    <TableRow 
+                      key={index}
+                      className={`
+                        ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}
+                        hover:bg-blue-50 transition-colors duration-150 border-b border-slate-100
+                      `}
+                    >
+                      <TableCell className="font-medium text-slate-800">{po.documentNumber}</TableCell>
+                      <TableCell className="text-slate-700">{po.vendor}</TableCell>
+                      <TableCell className="font-semibold text-slate-900">{formatCurrency(po.total)}</TableCell>
                       <TableCell>
                         <Badge variant={po.status === 'Pending Receipt' ? 'secondary' : 'default'}>
                           {po.status}
                         </Badge>
                       </TableCell>
-                      <TableCell>{formatDate(po.date)}</TableCell>
-                      <TableCell>{po.entries.length} items</TableCell>
+                      <TableCell className="text-slate-600">{formatDate(po.date)}</TableCell>
+                      <TableCell className="text-slate-700">{po.entries.length} items</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
               {parsedData.length > 10 && (
-                <p className="text-sm text-gray-500 mt-2">
-                  Showing first 10 of {parsedData.length} purchase orders...
-                </p>
+                <div className="mt-4 p-3 bg-gradient-to-r from-slate-50 to-blue-50 rounded-lg border border-slate-200">
+                  <p className="text-sm font-medium text-slate-700">
+                    Showing first <span className="font-semibold text-slate-900">10</span> of <span className="font-semibold text-slate-900">{parsedData.length}</span> purchase orders...
+                  </p>
+                </div>
               )}
             </div>
           </CardContent>

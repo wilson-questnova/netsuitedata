@@ -136,29 +136,40 @@ export default async function PurchaseOrderDetailPage({ params }: { params: Prom
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900">Purchase Order Entries</h3>
-              <span className="text-sm text-gray-600">
-                {purchaseOrder.entries.length} {purchaseOrder.entries.length === 1 ? 'item' : 'items'}
-              </span>
+            </div>
+            
+            <div className="mb-6 p-4 bg-gradient-to-r from-slate-50 to-blue-50 rounded-lg border border-slate-200">
+              <div className="text-sm font-medium text-slate-700">
+                <span className="font-semibold text-slate-900">
+                  {purchaseOrder.entries.length} {purchaseOrder.entries.length === 1 ? 'item' : 'items'}
+                </span>
+              </div>
             </div>
             
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Item Name</TableHead>
-                  <TableHead className="text-center">Quantity</TableHead>
-                  <TableHead className="text-right">Unit Price</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
+                <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+                  <TableHead className="font-semibold text-slate-700 bg-slate-100">Item Name</TableHead>
+                  <TableHead className="text-center font-semibold text-slate-700 bg-slate-100">Quantity</TableHead>
+                  <TableHead className="text-right font-semibold text-slate-700 bg-slate-100">Unit Price</TableHead>
+                  <TableHead className="text-right font-semibold text-slate-700 bg-slate-100">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {purchaseOrder.entries.map((entry) => (
-                  <TableRow key={entry.id} className="hover:bg-gray-50">
-                    <TableCell className="font-medium">{entry.item}</TableCell>
-                    <TableCell className="text-center">{entry.quantity}</TableCell>
-                    <TableCell className="text-right font-medium">
+                {purchaseOrder.entries.map((entry, index) => (
+                  <TableRow 
+                    key={entry.id} 
+                    className={`
+                      ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}
+                      hover:bg-blue-50 transition-colors duration-150 border-b border-slate-100
+                    `}
+                  >
+                    <TableCell className="font-medium text-slate-800">{entry.item}</TableCell>
+                    <TableCell className="text-center text-slate-700">{entry.quantity}</TableCell>
+                    <TableCell className="text-right font-semibold text-slate-900">
                       ₱{formatCurrency(entry.rate)}
                     </TableCell>
-                    <TableCell className="text-right font-medium">
+                    <TableCell className="text-right font-semibold text-slate-900">
                       ₱{formatCurrency(entry.amount)}
                     </TableCell>
                   </TableRow>

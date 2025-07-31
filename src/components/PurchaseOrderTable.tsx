@@ -39,26 +39,32 @@ export default async function PurchaseOrderTable({ query, status }: { query: str
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead>Document Number</TableHead>
-          <TableHead>Supplier</TableHead>
-          <TableHead>Memo</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+        <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+          <TableHead className="font-semibold text-slate-700 bg-slate-100">Document Number</TableHead>
+          <TableHead className="font-semibold text-slate-700 bg-slate-100">Supplier</TableHead>
+          <TableHead className="font-semibold text-slate-700 bg-slate-100">Memo</TableHead>
+          <TableHead className="font-semibold text-slate-700 bg-slate-100">Status</TableHead>
+          <TableHead className="text-right font-semibold text-slate-700 bg-slate-100">Amount</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {purchaseOrders.map((po) => (
-          <TableRow key={po.id}>
+        {purchaseOrders.map((po, index) => (
+          <TableRow 
+            key={po.id}
+            className={`
+              ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}
+              hover:bg-blue-50 transition-colors duration-150 border-b border-slate-100
+            `}
+          >
             <TableCell>
-              <Link href={`/purchase-order/${po.id}`} className="text-blue-500 hover:underline">
+              <Link href={`/purchase-order/${po.id}`} className="text-blue-600 hover:text-blue-800 hover:underline font-medium">
                 {po.documentNumber}
               </Link>
             </TableCell>
-            <TableCell>{po.vendor}</TableCell>
-            <TableCell>{po.memo}</TableCell>
-            <TableCell>{po.status}</TableCell>
-            <TableCell className="text-right">₱{formatCurrency(po.total)}</TableCell>
+            <TableCell className="text-slate-700">{po.vendor}</TableCell>
+            <TableCell className="text-slate-600">{po.memo}</TableCell>
+            <TableCell className="text-slate-700">{po.status}</TableCell>
+            <TableCell className="text-right font-semibold text-slate-900">₱{formatCurrency(po.total)}</TableCell>
           </TableRow>
         ))}
       </TableBody>

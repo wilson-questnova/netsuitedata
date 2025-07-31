@@ -116,44 +116,52 @@ export default function PurchaseOrderTableWithPagination({ query, status, fromDa
     <div className="space-y-4">
       {/* Total count display */}
       <div className="flex justify-between items-center mb-4">
-        <div className="text-sm text-gray-600">
-          {totalCount > 0 ? (
-            <span>
-              Showing {purchaseOrders.length} of {totalCount.toLocaleString()} purchase orders
-              {(query || (status && status !== 'all')) && (
-                <span className="ml-1">
-                  {query && `matching "${query}"`}
-                  {query && status && status !== 'all' && ' and '}
-                  {status && status !== 'all' && `with status "${status}"`}
-                </span>
-              )}
-            </span>
-          ) : (
-            <span>No purchase orders found</span>
-          )}
+        <div className="mb-6 p-4 bg-gradient-to-r from-slate-50 to-blue-50 rounded-lg border border-slate-200">
+          <div className="text-sm font-medium text-slate-700">
+            {totalCount > 0 ? (
+              <span>
+                Showing <span className="font-semibold text-slate-900">{purchaseOrders.length}</span> of <span className="font-semibold text-slate-900">{totalCount.toLocaleString()}</span> purchase orders
+                {(query || (status && status !== 'all')) && (
+                  <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                    {query && `matching "${query}"`}
+                    {query && status && status !== 'all' && ' and '}
+                    {status && status !== 'all' && `status: ${status}`}
+                  </span>
+                )}
+              </span>
+            ) : (
+              <span>No purchase orders found</span>
+            )}
+          </div>
         </div>
       </div>
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Document Number</TableHead>
-            <TableHead>Supplier</TableHead>
-            <TableHead>Date</TableHead>
+          <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 border-b-2 border-slate-200">
+            <TableHead className="font-semibold text-slate-700 bg-slate-100">Document Number</TableHead>
+            <TableHead className="font-semibold text-slate-700 bg-slate-100">Supplier</TableHead>
+            <TableHead className="font-semibold text-slate-700 bg-slate-100">Date</TableHead>
             {/* <TableHead>Memo</TableHead> */}
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="font-semibold text-slate-700 bg-slate-100">Status</TableHead>
+            <TableHead className="text-right font-semibold text-slate-700 bg-slate-100">Amount</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {purchaseOrders && purchaseOrders.map((po) => (
-            <TableRow key={po.id} className="hover:bg-gray-50">
-              <TableCell>
+          {purchaseOrders && purchaseOrders.map((po, index) => (
+            <TableRow 
+              key={po.id} 
+              className={`
+                ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}
+                hover:bg-blue-50 transition-colors duration-150 border-b border-slate-100
+              `}
+            >
+              <TableCell className="font-medium text-slate-800">
                 <Link href={`/purchase-order/${po.id}`} className="text-blue-600 hover:text-blue-800 hover:underline font-medium">
                   {po.documentNumber}
                 </Link>
               </TableCell>
-              <TableCell className="font-medium">{po.vendor}</TableCell>
-              <TableCell className="text-gray-600">{formatDate(po.date)}</TableCell>
+              <TableCell className="font-medium text-slate-700">{po.vendor}</TableCell>
+              <TableCell className="text-slate-600">{formatDate(po.date)}</TableCell>
               {/* <TableCell className="text-gray-600">{po.memo}</TableCell> */}
               <TableCell>
                 <Badge 
@@ -163,7 +171,7 @@ export default function PurchaseOrderTableWithPagination({ query, status, fromDa
                   {po.status}
                 </Badge>
               </TableCell>
-              <TableCell className="text-right font-medium">
+              <TableCell className="text-right font-semibold text-slate-900">
                 ₱{formatCurrency(po.total)}
               </TableCell>
             </TableRow>
