@@ -142,7 +142,7 @@ export default function ImportPage() {
              setIsLoading(false);
            }
         });
-      } catch (err) {
+      } catch (_) {
         setError('Error reading file content. Please try again.');
         setIsLoading(false);
       }

@@ -1,0 +1,12 @@
+# Full database dump
+# Original command (may cause collation issues on older MySQL versions)
+# mysqldump -u root -p netsuite_data transactions > transactions_only.sql
+
+# RECOMMENDED: Compatible mysqldump command for cross-version compatibility
+mysqldump -u root -p --default-character-set=utf8mb4 --single-transaction --routines --triggers netsuite_data transactions > transactions_only.sql
+
+# Alternative: Force older collation during dump
+mysqldump -u root -p --default-character-set=utf8 --single-transaction netsuite_data transactions --skip-add-drop-table > transactions_only.sql
+
+# Post-processing fix for existing dumps (convert utf8mb4_0900_ai_ci to utf8mb4_unicode_ci)
+sed 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g' transactions_only.sql > transactions_only_fixed.sql

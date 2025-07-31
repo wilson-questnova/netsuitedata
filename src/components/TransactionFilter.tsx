@@ -15,7 +15,6 @@ const getCurrentDate = () => {
 };
 
 export default function TransactionFilter() {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -130,7 +129,7 @@ export default function TransactionFilter() {
   };
 
   // Update local filter state
-  const updateLocalFilter = (key: string, value: any) => {
+  const updateLocalFilter = (key: string, value: string | boolean) => {
     setLocalFilters(prev => ({
       ...prev,
       [key]: value

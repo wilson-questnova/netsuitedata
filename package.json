@@ -7,6 +7,8 @@
     "build": "next build",
     "import-csv": "ts-node -r dotenv/config scripts/import-csv.ts",
     "import-transactions": "ts-node -r dotenv/config scripts/import-transactions.ts",
+    "bulk-import-transactions": "ts-node -r dotenv/config scripts/bulk-import-transactions.ts",
+    "auto-import-all-transactions": "ts-node -r dotenv/config scripts/auto-import-all-transactions.ts",
     "start": "next start",
     "lint": "next lint"
   },

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { DataSource, Like, FindOptionsWhere } from 'typeorm';
+import { Like, FindOptionsWhere } from 'typeorm';
 import { PurchaseOrder } from '../entity/PurchaseOrder';
 import { getDataSource } from '../lib/db';
 import Link from 'next/link';
