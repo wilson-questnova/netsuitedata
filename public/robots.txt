@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+
+# This file prevents all web crawlers from indexing any part of the site
+# Combined with the X-Robots-Tag headers in middleware, this provides
+# comprehensive protection against search engine indexing
