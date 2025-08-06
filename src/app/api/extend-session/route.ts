@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * Extends the current session by updating the last activity time
  * This endpoint relies on the middleware to handle session validation and extension
  */
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // The middleware will handle session validation and extension
     // If we reach this point, the session has been extended

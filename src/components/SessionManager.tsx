@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 // Session configuration (should match middleware)
 const SESSION_CONFIG = {
@@ -19,7 +18,6 @@ export default function SessionManager({ children }: SessionManagerProps) {
   const [showWarning, setShowWarning] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [isSessionExpired, setIsSessionExpired] = useState(false);
-  const router = useRouter();
 
   /**
    * Check session status by making a request to the server
@@ -87,9 +85,7 @@ export default function SessionManager({ children }: SessionManagerProps) {
    */
   useEffect(() => {
     let lastActivity = Date.now();
-    let warningTimer: NodeJS.Timeout | null = null;
-    let sessionTimer: NodeJS.Timeout | null = null;
-    let checkTimer: NodeJS.Timeout;
+    const checkTimer: { current: NodeJS.Timeout | null } = { current: null };
 
     const updateActivity = () => {
       lastActivity = Date.now();
@@ -124,7 +120,7 @@ export default function SessionManager({ children }: SessionManagerProps) {
     });
 
     // Set up periodic session checking
-    checkTimer = setInterval(checkSession, SESSION_CONFIG.CHECK_INTERVAL);
+    checkTimer.current = setInterval(checkSession, SESSION_CONFIG.CHECK_INTERVAL);
 
     // Initial session check
     checkSession();
@@ -135,9 +131,7 @@ export default function SessionManager({ children }: SessionManagerProps) {
         document.removeEventListener(event, updateActivity, true);
       });
       
-      if (warningTimer) clearTimeout(warningTimer);
-      if (sessionTimer) clearTimeout(sessionTimer);
-      if (checkTimer) clearInterval(checkTimer);
+      if (checkTimer.current) clearInterval(checkTimer.current);
     };
   }, []);
 

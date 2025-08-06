@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * Checks if the current session is valid
  * Returns 200 if session is valid, 401 if expired or invalid
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // The middleware will handle session validation
     // If we reach this point, the session is valid

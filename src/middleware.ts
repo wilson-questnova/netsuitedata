@@ -7,13 +7,16 @@ const SESSION_CONFIG = {
   SESSION_COOKIE_NAME: 'netsuite-session',
 };
 
-// Simple in-memory session store (in production, use Redis or database)
-const sessionStore = new Map<string, {
+// Define session data interface
+interface SessionData {
   username: string;
   loginTime: number;
   lastActivity: number;
   sessionId: string;
-}>();
+}
+
+// Simple in-memory session store (in production, use Redis or database)
+const sessionStore = new Map<string, SessionData>();
 
 /**
  * Generate a secure session ID
@@ -25,10 +28,10 @@ function generateSessionId(): string {
 /**
  * Check if session is valid and not expired
  */
-function isSessionValid(sessionData: any): boolean {
-  const now = Date.now();
-  const timeSinceLogin = now - sessionData.loginTime;
-  const timeSinceActivity = now - sessionData.lastActivity;
+function isSessionValid(sessionData: SessionData): boolean {
+    const now = Date.now();
+    const timeSinceLogin = now - sessionData.loginTime;
+    const timeSinceActivity = now - sessionData.lastActivity;
   
   // Check maximum session duration
   if (timeSinceLogin > SESSION_CONFIG.MAX_SESSION_DURATION) {
@@ -49,7 +52,6 @@ function isSessionValid(sessionData: any): boolean {
  * Clean up expired sessions
  */
 function cleanupExpiredSessions(): void {
-  const now = Date.now();
   for (const [sessionId, sessionData] of sessionStore.entries()) {
     if (!isSessionValid(sessionData)) {
       sessionStore.delete(sessionId);
